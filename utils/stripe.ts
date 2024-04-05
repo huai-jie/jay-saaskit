@@ -15,7 +15,7 @@ export function getStripePremiumPlanPriceId() {
 }
 
 export const stripe = new Stripe(STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-08-16",
+  apiVersion: "2023-10-16",
   // Use the Fetch API instead of Node's HTTP client.
   httpClient: Stripe.createFetchHttpClient(),
 });

@@ -13,8 +13,8 @@ export default defineApp<State>((_, ctx) => {
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body>
-        <div class="dark:bg-gray-900">
-          <div class="flex flex-col min-h-screen mx-auto max-w-7xl w-full dark:text-white">
+        <div class="">
+          <div class="flex flex-col min-h-screen mx-auto max-w-7xl w-full ">
             <Header
               url={ctx.url}
               sessionUser={ctx.state?.sessionUser}

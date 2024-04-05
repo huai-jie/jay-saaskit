@@ -16,6 +16,7 @@ import * as $api_users_login_index from "./routes/api/users/[login]/index.ts";
 import * as $api_users_login_items from "./routes/api/users/[login]/items.ts";
 import * as $api_users_index from "./routes/api/users/index.ts";
 import * as $api_vote from "./routes/api/vote.ts";
+import * as $checkout from "./routes/checkout.tsx";
 import * as $dashboard_index from "./routes/dashboard/index.tsx";
 import * as $dashboard_stats from "./routes/dashboard/stats.tsx";
 import * as $dashboard_users from "./routes/dashboard/users.tsx";
@@ -25,6 +26,7 @@ import * as $submit from "./routes/submit.tsx";
 import * as $users_login_ from "./routes/users/[login].tsx";
 import * as $welcome from "./routes/welcome.tsx";
 import * as $Chart from "./islands/Chart.tsx";
+import * as $CheckoutForm from "./islands/CheckoutForm.tsx";
 import * as $ItemsList from "./islands/ItemsList.tsx";
 import * as $UsersTable from "./islands/UsersTable.tsx";
 import { type Manifest } from "$fresh/server.ts";
@@ -45,6 +47,7 @@ const manifest = {
     "./routes/api/users/[login]/items.ts": $api_users_login_items,
     "./routes/api/users/index.ts": $api_users_index,
     "./routes/api/vote.ts": $api_vote,
+    "./routes/checkout.tsx": $checkout,
     "./routes/dashboard/index.tsx": $dashboard_index,
     "./routes/dashboard/stats.tsx": $dashboard_stats,
     "./routes/dashboard/users.tsx": $dashboard_users,
@@ -56,6 +59,7 @@ const manifest = {
   },
   islands: {
     "./islands/Chart.tsx": $Chart,
+    "./islands/CheckoutForm.tsx": $CheckoutForm,
     "./islands/ItemsList.tsx": $ItemsList,
     "./islands/UsersTable.tsx": $UsersTable,
   },
