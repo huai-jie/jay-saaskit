@@ -20,6 +20,21 @@ export default defineRoute<State>(async (_req, ctx) => {
     active: true,
   });
 
+  const retrieveClientSecret = async () => {
+    // Create PaymentIntent as soon as the page loads
+    const res = await fetch(ctx.url.origin + "/api/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Stripe-Signature": crypto.randomUUID(),
+      },
+      body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+    });
+    const data = await res.json();
+    return (data.clientSecret);
+  };
+  const clientSecret = await retrieveClientSecret();
+
   if (data.length === 0) {
     throw new Error(
       "No Stripe products have been found. Please see https://github.com/denoland/saaskit#set-up-stripe-optional to set up Stripe locally and create a Stripe product.",
@@ -29,10 +44,10 @@ export default defineRoute<State>(async (_req, ctx) => {
   return (
     <>
       <Head title="Pricing" href={ctx.url.href}>
-        <script src="https://js.stripe.com/v3/"></script>
+        <link rel="stylesheet" href="/checkout.css" />
       </Head>
       <main class="mx-auto max-w-5xl w-full flex-1 flex flex-col justify-center px-4">
-        <CheckoutForm />
+        <CheckoutForm clientSecret={clientSecret} />
       </main>
     </>
   );

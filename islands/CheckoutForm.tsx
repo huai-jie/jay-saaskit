@@ -1,41 +1,37 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
+import { loadStripe, StripePaymentElement } from "@stripe/stripe-js";
 
-export default function CheckoutForm() {
-  const [clientSecret, setClientSecret] = useState(null);
-
+export default function CheckoutForm(props: { clientSecret: string }) {
   useEffect(() => {
-
-    const setupPrice = async () => {
-      const stripe = new Stripe(STRIPE_SECRET_KEY!, {
-        apiVersion: "2023-10-16",
-        // Use the Fetch API instead of Node's HTTP client.
-        httpClient: Stripe.createFetchHttpClient(),
-      });
-      const res = await stripe.paymentIntents.create({
-        amount: 1400,
-        currency: "myr",
-        // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-        automatic_payment_methods: {
-          enabled: true,
-        },
-      });
-      console.log(res);
+    let stripe;
+    const setupStripe = async () => {
+      stripe = await loadStripe(
+        "pk_test_51MXHRGFuWaVfNZQZYlGjTh0GXMLTDHrxeH2CFZDaGZctvRbPYviZF015QXZoDlJRGr44tlpD2tDWkMpcaeEG12B200sjCZDA2g",
+      );
+      const appearance = {
+        theme: "stripe",
+      };
+      if (stripe) {
+        const elements = stripe.elements({
+          ...appearance,
+          clientSecret: props.clientSecret,
+        });
+        const paymentElementOptions = {
+          paymentRequestButton: { // Only necessary if using the Payment Request Button
+            type: "default", // Or 'book', 'buy', 'donate'
+          },
+          layout: "tabs",
+        };
+        const paymentElement: StripePaymentElement = elements.create(
+          // @ts-ignore: Property 'payment' actually does exist on type 'StripePaymentElement'
+          "payment",
+          paymentElementOptions,
+        );
+        paymentElement.mount("#payment-element");
+      }
     };
-    setupPrice();
-    // const stripe = Stripe(
-    //   "pk_test_51MXHRGFuWaVfNZQZYlGjTh0GXMLTDHrxeH2CFZDaGZctvRbPYviZF015QXZoDlJRGr44tlpD2tDWkMpcaeEG12B200sjCZDA2g",
-    // );
-    // const appearance = {
-    //   theme: "stripe",
-    // };
-    // elements = stripe.elements({ appearance, clientSecret });
-    // const paymentElementOptions = {
-    //   layout: "tabs",
-    // };
-
-    // const paymentElement = elements.create("payment", paymentElementOptions);
-    // paymentElement.mount("#payment-element");
+    setupStripe();
   }, []);
 
   return (
