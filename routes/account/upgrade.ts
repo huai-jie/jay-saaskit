@@ -17,7 +17,7 @@ export default defineRoute<SignedInState>(async (_req, ctx) => {
     );
   }
 
-  const res = await stripe.checkout.sessions.create({
+  const { url } = await stripe.checkout.sessions.create({
     success_url: ctx.url.origin + "/account",
     customer: ctx.state.sessionUser.stripeCustomerId,
     line_items: [
@@ -28,8 +28,8 @@ export default defineRoute<SignedInState>(async (_req, ctx) => {
     ],
     mode: "subscription",
   });
-  console.log(res);
-  // if (url === null) return ctx.renderNotFound();
 
-  // return redirect(url);
+  if (url === null) return ctx.renderNotFound();
+
+  return redirect(url);
 });

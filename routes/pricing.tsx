@@ -107,7 +107,7 @@ function PremiumPlanCard(props: PremiumCardPlanProps) {
           : (
             <a
               class="button-styles w-full rounded-md block"
-              href="/checkout"
+              href="/account/upgrade"
             >
               Upgrade
             </a>

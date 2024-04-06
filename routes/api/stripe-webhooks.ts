@@ -66,6 +66,14 @@ export const handler: Handlers = {
         await updateUser({ ...user, isSubscribed: false });
         return new Response(null, { status: STATUS_CODE.Accepted });
       }
+      case "payment_intent.succeeded": {
+        console.log("payment intent succeeded");
+        return new Response(null, { status: STATUS_CODE.Accepted });
+      }
+      case "payment_intent.payment_failed": {
+        console.log("payment intent failed");
+        return new Response(null, { status: STATUS_CODE.Accepted });
+      }
       default: {
         throw new BadRequestError("Event type not supported");
       }

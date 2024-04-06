@@ -5,17 +5,8 @@ import { isStripeEnabled, stripe } from "@/utils/stripe.ts";
 import { BadRequestError } from "@/utils/http.ts";
 
 export const handler: Handlers = {
-  /**
-   * Handles Stripe webhooks requests when a user subscribes
-   * (`customer.subscription.created`) or cancels
-   * (`customer.subscription.deleted`) the "Premium Plan".
-   *
-   * @see {@link https://github.com/stripe-samples/stripe-node-deno-samples/blob/2d571b20cd88f1c1f02185483729a37210484c68/webhook-signing/main.js}
-   */
   async POST(req) {
     if (!isStripeEnabled()) throw new Deno.errors.NotFound("Not Found");
-
-    /** @see {@link https://stripe.com/docs/webhooks#verify-events} */
     const body = await req.text();
     const signature = req.headers.get("stripe-signature");
     if (signature === null) {
@@ -36,7 +27,7 @@ export const handler: Handlers = {
     try {
       event = await stripe.paymentIntents.create({
         amount: calculateOrderAmount(items),
-        currency: "eur",
+        currency: "myr",
         // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
         automatic_payment_methods: {
           enabled: true,
@@ -46,7 +37,6 @@ export const handler: Handlers = {
       throw new BadRequestError(error.message);
     }
 
-    // console.log(event);
     return Response.json({
       clientSecret: event.client_secret,
     }, { status: STATUS_CODE.Accepted });
