@@ -9,19 +9,29 @@ export default function CheckoutForm(props: { clientSecret: string }) {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    const { error } = await stripe.confirmPayment({
+    const res = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:8000/checkout",
+        // return_url: "http://localhost:8000/checkout",
       },
+      redirect: 'if_required',
+    }).then(function(result: any) {
+      console.log(result)
+      if (result.error) {
+        // Inform the customer there was an error
+        console.error(result.error.message);
+      } else {
+        // Payment processing is in progress or completed; you can show a message to the customer or a loader indicating that payment is being confirmed
+        console.log("Payment Success!")
+      }
     });
 
-    if (error.type === "card_error" || error.type === "validation_error") {
-      console.log(error.message);
-    } else {
-      console.log("An unexpected error occurred.");
-    }
+    // if (error.type === "card_error" || error.type === "validation_error") {
+    //   console.log(error.message);
+    // } else {
+    //   console.log("An unexpected error occurred.");
+    // }
   }
   useEffect(() => {
     if (props.clientSecret) {
