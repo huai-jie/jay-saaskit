@@ -30,7 +30,7 @@ jobs:
         run: deno task build # 📝 Update the build command(s) if necessary
 
       - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
+        uses: denoland/deployctl@v1 # commit
         with:
           project: kit-saaskit-24 # 📝 Update the deploy project name if necessary
           entrypoint: ./main.ts # 📝 Update the entrypoint if necessary
